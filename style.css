@@ -1,0 +1,161 @@
+ body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            background-color: #deecd6 !important;
+            forced-color-adjust: none;
+        }
+        body {
+            font-family: Arial, Sans-serif;
+        }
+        .hero {
+            background-color: #deecd6 !important;
+            min-height: 100vh;
+            padding: 40px 24px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero h1 {
+            font-size: 40px;
+            color: #2d5a1b; 
+            font-family: 'Syne' , sans-serif;
+        }
+        .hero p {
+            font-size: 14px;
+            color: #4a7c35;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-family: 'DM Sans' , sans-serif;
+        }
+        .carousel {
+            position:relative;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 24px;
+        }
+        .case-wrap {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.55s ease;
+        }
+        .case-wrap.active {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            z-index: 3;
+        }
+        .case-wrap.left {
+            transform: translateX(-220px) scale(0.72) ;
+            opacity: 0.4;
+            z-index: 2 ;
+        }
+        .case-wrap.right {
+            transform: translateX(220px) scale(0.72) ;
+            opacity: 0.4;
+            z-index: 2;
+        }
+        .case-wrap.hidden {
+            transform: scale(0.4) ;
+            opacity: 0;
+            z-index: 1;
+        }
+        .phone-case {
+            width: 140px;
+            height: 220px;
+            object-fit: contain;
+        }
+        .case-label {
+            font-family: 'DM Sans' , sans-serif ;
+            font-size: 12px ;
+            color: #3B6D11;
+        }
+.order-section {
+  background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('images/phonecase.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: -180px;
+  padding: 300px 24px 80px;
+  box-sizing: border-box;
+}
+.order-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 360px;
+  background: linear-gradient(
+    to bottom,
+    #deecd6 0%,
+    rgba(222, 236, 214, 0.95) 25%,
+    rgba(222, 236, 214, 0.65) 60%,
+    rgba(222, 236, 214, 0) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+.order-content {
+  background-color: rgba(0, 0, 0, 0.45);
+  padding: 48px 40px;
+  border-radius: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.order-tag {
+  display: inline-block;
+  background-color: #6ca824;
+  color: #112d03;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.order-section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #95f371;
+  margin-bottom: 12px;
+}
+
+.order-section p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  color: hwb(107 61% 6%);
+  margin-bottom: 28px;
+}
+
+.order-btn {
+  display: inline-block;
+  padding: 14px 40px;
+  background-color: #2d5a1b;
+  color: #deecd6;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.order-btn:hover {
+  background-color: #1a3d08;
+}
