@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENGRAVERS ORDER FORM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="order.css" />
+</head>
+<body>
+  <div class="container py-5">
+    <div class="order-page mx-auto">
+
+      <div class="order-header text-center mb-4">
+        <h1>Place Your Order</h1>
+        <p>Fill in the details below and we'll get your case made!</p>
+        <a href="track.php" class="text-success fw-semibold text-decoration-none">Track an existing order</a>
+      </div>
+
+      <form id="orderForm">
+
+        <!-- NAME -->
+        <div class="field mb-3">
+          <label class="form-label">Your Name</label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required />
+        </div>
+
+        <!-- PHONE NUMBER -->
+        <div class="field mb-3">
+          <label class="form-label">Your Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="form-control" placeholder="e.g. 0971234567" required />
+        </div>
+
+        <!-- PHONE BRAND -->
+        <div class="field mb-3">
+          <label class="form-label">Phone Brand</label>
+          <select id="brand" name="brand" class="form-select" required>
+            <option value="">-- Select Brand --</option>
+            <option value="iphone">iPhone</option>
+            <option value="samsung">Samsung</option>
+            <option value="pixel">Google Pixel</option>
+          </select>
+        </div>
+
+        <!-- PHONE MODEL -->
+        <div class="field mb-3" id="modelField" style="display:none">
+          <label class="form-label">Phone Model</label>
+          <select id="model" name="model" class="form-select" required></select>
+        </div>
+
+        <!-- CASE FINISH -->
+       <!-- CASE FINISH -->
+<div class="field mb-3" id="finishField" style="display:none">
+  <label class="form-label">Case Finish</label>
+  <div class="d-flex gap-2">
+    <input type="radio" class="btn-check" name="finish" id="mattBtn" value="Matte" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="mattBtn">Matte</label>
+
+    <input type="radio" class="btn-check" name="finish" id="glossBtn" value="Glossy" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="glossBtn">Glossy</label>
+  </div>
+</div>
+
+<!-- CASE TYPE -->
+<div class="field mb-3" id="typeField" style="display:none">
+  <label class="form-label">Case Type</label>
+  <div class="d-flex gap-2">
+    <input type="radio" class="btn-check" name="caseType" id="singleBtn" value="Single" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="singleBtn">Single — K120</label>
+
+    <input type="radio" class="btn-check" name="caseType" id="doubleBtn" value="Double" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="doubleBtn">Double — K150</label>
+  </div>
+</div>
+
+<!-- SILICON PAD -->
+<div class="field mb-3" id="siliconField" style="display:none">
+  <label class="form-label">Silicon Suction Pad</label>
+  <div class="d-flex gap-2">
+    <input type="radio" class="btn-check" name="silicon" id="siliconYes" value="Yes" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="siliconYes">Yes (+K30)</label>
+
+    <input type="radio" class="btn-check" name="silicon" id="siliconNo" value="No" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="siliconNo">No</label>
+  </div>
+</div>
+
+<!-- DELIVERY -->
+<div class="field mb-3" id="deliveryField" style="display:none">
+  <label class="form-label">Delivery Option</label>
+  <div class="d-flex gap-2">
+    <input type="radio" class="btn-check" name="delivery" id="pickupBtn" value="Pickup" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="pickupBtn">Pickup in Lusaka</label>
+
+    <input type="radio" class="btn-check" name="delivery" id="deliverBtn" value="Delivery" autocomplete="off" />
+    <label class="btn btn-outline-success w-50" for="deliverBtn">Delivery</label>
+  </div>
+</div>
+
+        <!-- LOCATION -->
+        <div class="field mb-3" id="locationField" style="display:none">
+          <label class="form-label">Your Location</label>
+          <input type="text" id="location" name="location" class="form-control" placeholder="Enter your location for delivery" />
+        </div>
+
+        <!-- PRICE SUMMARY -->
+        <div class="field mb-3" id="priceField" style="display:none">
+          <div class="price-box d-flex justify-content-between align-items-center">
+            <span>Total Price:</span>
+            <span id="totalDisplay">K0</span>
+          </div>
+        </div>
+
+        <!-- DESIGN UPLOAD -->
+        <div class="field mb-3" id="uploadField" style="display:none">
+          <label class="form-label">Upload Your Design</label>
+          <small class="d-block mb-1">Minimum 1000 x 1000px &nbsp;·&nbsp; Max 5MB</small>
+          <input type="file" id="design" name="design" class="form-control" accept="image/*" required />
+          <span id="uploadError" class="text-danger" style="font-size:12px;display:none">Image must be at least 1000x1000px</span>
+        </div>
+
+        <!-- PAYMENT SCREENSHOT -->
+        <div class="field mb-3" id="paymentField" style="display:none">
+          <label class="form-label">Payment Screenshot</label>
+          <small class="d-block mb-1">Upload proof of payment &nbsp;·&nbsp; Max 5MB</small>
+          <input type="file" id="payment" name="payment" class="form-control" accept="image/*" required />
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" id="submitBtn" class="w-100 mt-3" style="display:none">Send Order →</button>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="order.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

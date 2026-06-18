@@ -1,0 +1,3 @@
+# Sensitive files - never commit these
+config.php
+uploads/
