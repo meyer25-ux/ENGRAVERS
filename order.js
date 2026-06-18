@@ -221,7 +221,7 @@ document.querySelectorAll('input[name="delivery"]').forEach(function(radio) {
 });
 
 // ---------------------------------------------------------------------------
-// Design image validation (min 1000×1000, max 5MB)
+// Design image validation (min 800×1500, max 5MB)
 // ---------------------------------------------------------------------------
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -230,6 +230,13 @@ document.getElementById('design').addEventListener('change', function() {
   if (!file) return;
 
   // Check file size first
+  const MIN_FILE_SIZE = 500 * 1024; // 500KB
+if (file.size < MIN_FILE_SIZE) {
+    document.getElementById('uploadError').textContent = 'Image file is too small (' + (file.size / 1024).toFixed(0) + 'KB). This usually means the photo is compressed or low quality. Please upload the original photo from your gallery. Minimum 500KB.';
+    document.getElementById('uploadError').style.display = 'block';
+    this.value = '';
+    return;
+}
   if (file.size > MAX_FILE_SIZE) {
     document.getElementById('uploadError').textContent = 'Image is too large (max 5MB). Please compress it and try again.';
     document.getElementById('uploadError').style.display = 'block';
@@ -241,8 +248,8 @@ document.getElementById('design').addEventListener('change', function() {
   img.src = URL.createObjectURL(file);
   img.onload = function() {
     const errorEl = document.getElementById('uploadError');
-    if (img.width < 1000 || img.height < 1000) {
-      errorEl.textContent = 'Image must be at least 1000x1000px';
+    if (img.width < 800 || img.height < 1500) {
+      errorEl.textContent = 'Your image is too small (' + img.width + 'x' + img.height + 'px). WhatsApp and screenshots compress photos and will print blurry on your case. Please send the original photo from your gallery. Minimum size: 800x1500px.';
       errorEl.style.display = 'block';
       document.getElementById('design').value = '';
     } else {
