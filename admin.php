@@ -1,12 +1,73 @@
 <?php
+// Harden session cookie before session_start()
+ini_set('session.cookie_httponly', '1');   // Blocks JS from reading the cookie
+ini_set('session.cookie_secure',   '1');   // HTTPS only — set to '0' for local HTTP testing
+ini_set('session.cookie_samesite', 'Strict'); // Blocks cross-site requests carrying the cookie
+ini_set('session.use_strict_mode', '1');   // Reject unrecognised session IDs
+ini_set('session.gc_maxlifetime',  '1800'); // Expire idle sessions after 30 min
 session_start();
 require_once __DIR__ . '/config.php';
 
 if (isset($_POST['logout'])) { session_destroy(); header('Location: admin.php'); exit; }
-if (isset($_POST['password'])) {
-    if (password_verify($_POST['password'], ADMIN_PASSWORD_HASH)) $_SESSION['admin'] = true;
-    else $loginError = 'Wrong password. Try again.';
+
+// Validate CSRF token on every POST (logout, login, status update)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/db.php'; // loads csrf_validate_token()
+    // Skip CSRF check only for the initial login form — token doesn't exist yet for anonymous users.
+    // For all authenticated POSTs the token must be present and valid.
+    if (!isset($_POST['password'])) {
+        csrf_validate_token();
+    }
 }
+
+// --- Brute-force protection ---
+$ip = $_SERVER['REMOTE_ADDR'];
+$maxAttempts = 5;
+$lockoutMinutes = 5;
+
+$authConn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if ($authConn->connect_error) {
+    error_log('DB connection failed: ' . $authConn->connect_error);
+    die('Something went wrong. Please try again later.');
+}
+
+$stmt = $authConn->prepare("SELECT attempts, last_attempt FROM login_attempts WHERE ip = ?");
+$stmt->bind_param('s', $ip);
+$stmt->execute();
+$attemptRow = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$isLockedOut = false;
+if ($attemptRow && $attemptRow['attempts'] >= $maxAttempts) {
+    $secondsSince = time() - strtotime($attemptRow['last_attempt']);
+    if ($secondsSince < $lockoutMinutes * 60) {
+        $isLockedOut = true;
+        $minutesLeft = ceil(($lockoutMinutes * 60 - $secondsSince) / 60);
+        $loginError = "Too many failed attempts. Try again in $minutesLeft minute(s).";
+    }
+}
+
+if (isset($_POST['password']) && !$isLockedOut) {
+    if (password_verify($_POST['password'], ADMIN_PASSWORD_HASH)) {
+        $_SESSION['admin'] = true;
+        $reset = $authConn->prepare("DELETE FROM login_attempts WHERE ip = ?");
+        $reset->bind_param('s', $ip);
+        $reset->execute();
+        $reset->close();
+    } else {
+        $loginError = 'Wrong password. Try again.';
+        $upsert = $authConn->prepare("
+            INSERT INTO login_attempts (ip, attempts, last_attempt)
+            VALUES (?, 1, NOW())
+            ON DUPLICATE KEY UPDATE attempts = attempts + 1, last_attempt = NOW()
+        ");
+        $upsert->bind_param('s', $ip);
+        $upsert->execute();
+        $upsert->close();
+    }
+}
+
+$authConn->close();
 $loggedIn = !empty($_SESSION['admin']);
 
 $conn = null;
@@ -15,7 +76,10 @@ $stats  = [];
 
 if ($loggedIn) {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    if ($conn->connect_error) die('DB error: ' . $conn->connect_error);
+   if ($conn->connect_error) {
+    error_log('DB error: ' . $conn->connect_error);
+    die('Something went wrong. Please try again later.');
+}
 
     // Status update
     if (isset($_POST['update_status']) && isset($_POST['order_id'])) {
@@ -195,6 +259,7 @@ tr:hover td { background: #fafff8; }
     <h1>ENGRAVERS</h1>
     <p>Admin Panel - Enter your password</p>
     <form method="POST">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_generate_token()) ?>">
       <input type="password" name="password" placeholder="Password" autofocus required />
       <button type="submit">Enter →</button>
     </form>
@@ -212,6 +277,7 @@ tr:hover td { background: #fafff8; }
     <a href="inventory.php" class="nav-link">Inventory</a>
   </div>
   <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_generate_token()) ?>">
     <button class="logout-btn" name="logout" value="1">Log Out</button>
   </form>
 </div>
@@ -347,6 +413,7 @@ tr:hover td { background: #fafff8; }
           </td>
           <td>
             <form class="status-form" method="POST">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_generate_token()) ?>">
               <input type="hidden" name="order_id" value="<?= $o['id'] ?>">
               <select name="status">
                 <?php foreach (['Pending','In Progress','Ready','Delivered','Cancelled'] as $s): ?>

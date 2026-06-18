@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/db.php'; // provides $conn (and config constants)
 
 $order = null;
 $message = '';
@@ -27,12 +27,7 @@ if ($submitted) {
   if ($orderId <= 0 || $phoneDigits === '') {
     $message = 'Enter your order ID and phone number.';
   } else {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-    if ($conn->connect_error) {
-      $message = 'We could not connect to the order system. Please try again later.';
-    } else {
-      $conn->set_charset('utf8mb4');
+      $conn->set_charset('utf8mb4'); // already set by db.php, harmless to repeat
 
       $hasStatus = false;
       $columnCheck = $conn->query("SHOW COLUMNS FROM orders LIKE 'status'");
@@ -59,7 +54,6 @@ if ($submitted) {
       } else {
         $message = 'No order matched that ID and phone number.';
       }
-    }
   }
 }
 

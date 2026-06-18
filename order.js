@@ -81,6 +81,7 @@ function resetFromModel() {
    'locationField','priceField','uploadField','paymentField'].forEach(function(id) {
     document.getElementById(id).style.display = 'none';
   });
+  document.getElementById('pickupInfo').style.display = 'none';
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('totalDisplay').textContent = 'K0';
 
@@ -179,7 +180,7 @@ document.querySelectorAll('input[name="caseType"]').forEach(function(radio) {
         : selectedProduct.sell_price_double;
     } else {
       // Fallback in case something went wrong loading product data
-      selectedTypePrice = this.value === 'Single' ? 120 : 150;
+      selectedTypePrice = this.value === 'Single' ? 100 : 150;
     }
 
     updateTotal();
@@ -204,8 +205,15 @@ document.querySelectorAll('input[name="silicon"]').forEach(function(radio) {
 document.querySelectorAll('input[name="delivery"]').forEach(function(radio) {
   radio.addEventListener('change', function() {
     selectedDelivery = this.value;
-    document.getElementById('locationField').style.display =
-      this.value === 'Delivery' ? 'block' : 'none';
+
+    if (this.value === 'Delivery') {
+      document.getElementById('locationField').style.display = 'block';
+      document.getElementById('pickupInfo').style.display    = 'none';
+    } else {
+      document.getElementById('locationField').style.display = 'none';
+      document.getElementById('pickupInfo').style.display    = 'block';
+    }
+
     document.getElementById('uploadField').style.display  = 'block';
     document.getElementById('paymentField').style.display = 'block';
     document.getElementById('submitBtn').style.display    = 'block';

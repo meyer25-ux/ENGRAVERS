@@ -1,5 +1,35 @@
 <?php
 header('Content-Type: application/json');
+
+// ---------------------------------------------------------------------------
+// Rate limiting — max 5 order submissions per IP per 10 minutes
+// ---------------------------------------------------------------------------
+session_start();
+$_ip       = $_SERVER['REMOTE_ADDR'];
+$_rateKey  = 'order_rate_' . md5($_ip);
+$_maxAttempts = 5;
+$_window      = 600; // 10 minutes
+
+if (!isset($_SESSION[$_rateKey])) {
+    $_SESSION[$_rateKey] = ['count' => 0, 'start' => time()];
+}
+
+$_rate = &$_SESSION[$_rateKey];
+
+// Reset window if expired
+if (time() - $_rate['start'] > $_window) {
+    $_rate = ['count' => 0, 'start' => time()];
+}
+
+if ($_rate['count'] >= $_maxAttempts) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'message' => 'Too many submissions. Please wait a few minutes and try again.']);
+    exit;
+}
+
+$_rate['count']++;
+unset($_rate); // release the reference
+
 require_once __DIR__ . '/db.php';
 
 // ---------------------------------------------------------------------------

@@ -218,12 +218,13 @@ img {
 
 .hero-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(48px, 10vw, 88px);
+   font-size: clamp(36px, 10vw, 88px);
     font-weight: 800;
     color: #2d5a1b;
     margin: 0 0 16px;
     line-height: 1;
     letter-spacing: -1px;
+    overflow-wrap: break-word; /* ← add this */
 }
 
 .hero-subtitle {
