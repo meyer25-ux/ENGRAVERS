@@ -1,7 +1,7 @@
 <?php
 // Harden session cookie before session_start()
 ini_set('session.cookie_httponly', '1');   // Blocks JS from reading the cookie
-ini_set('session.cookie_secure',   '1');   // HTTPS only — set to '0' for local HTTP testing
+ini_set('session.cookie_secure',   '0');   // HTTPS only — set to '0' for local HTTP testing
 ini_set('session.cookie_samesite', 'Strict'); // Blocks cross-site requests carrying the cookie
 ini_set('session.use_strict_mode', '1');   // Reject unrecognised session IDs
 ini_set('session.gc_maxlifetime',  '1800'); // Expire idle sessions after 30 min
@@ -11,10 +11,9 @@ require_once __DIR__ . '/config.php';
 if (isset($_POST['logout'])) { session_destroy(); header('Location: admin.php'); exit; }
 
 // Validate CSRF token on every POST (logout, login, status update)
+require_once __DIR__ . '/db.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once __DIR__ . '/db.php'; // loads csrf_validate_token()
-    // Skip CSRF check only for the initial login form — token doesn't exist yet for anonymous users.
-    // For all authenticated POSTs the token must be present and valid.
     if (!isset($_POST['password'])) {
         csrf_validate_token();
     }
