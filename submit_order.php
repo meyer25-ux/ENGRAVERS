@@ -94,20 +94,28 @@ foreach (['design', 'payment'] as $fileKey) {
     }
 }
 
-function saveFile($fileKey, $uploadDir) {
+function saveFile($fileKey, $uploadDir, $allowPdf = false) {
     if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) return null;
     $ext     = strtolower(pathinfo($_FILES[$fileKey]['name'], PATHINFO_EXTENSION));
     $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    if ($allowPdf) $allowed[] = 'pdf';
     if (!in_array($ext, $allowed, true)) return null;
-    // Verify it is actually an image
-    if (!getimagesize($_FILES[$fileKey]['tmp_name'])) return null;
+    // Only verify image dimensions for non-PDF files
+    if ($ext !== 'pdf' && !getimagesize($_FILES[$fileKey]['tmp_name'])) return null;
+    // For PDFs verify the file header starts with %PDF
+    if ($ext === 'pdf') {
+        $handle = fopen($_FILES[$fileKey]['tmp_name'], 'rb');
+        $header = fread($handle, 4);
+        fclose($handle);
+        if ($header !== '%PDF') return null;
+    }
     $filename = bin2hex(random_bytes(16)) . '.' . $ext;
     $dest     = $uploadDir . $filename;
     return move_uploaded_file($_FILES[$fileKey]['tmp_name'], $dest) ? 'uploads/' . $filename : null;
 }
 
-$designFile  = saveFile('design',  $uploadDir);
-$paymentFile = saveFile('payment', $uploadDir);
+$designFile  = saveFile('design',  $uploadDir, true);
+$paymentFile = saveFile('payment', $uploadDir, false);
 
 if (!$designFile)  { echo json_encode(['success' => false, 'message' => 'Design image upload failed.']);         exit; }
 if (!$paymentFile) { echo json_encode(['success' => false, 'message' => 'Payment screenshot upload failed.']);   exit; }

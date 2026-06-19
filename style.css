@@ -218,15 +218,14 @@ img {
 
 .hero-title {
     font-family: 'Syne', sans-serif;
-   font-size: clamp(36px, 10vw, 88px);
+    font-size: clamp(28px, 8vw, 88px);
     font-weight: 800;
     color: #2d5a1b;
     margin: 0 0 16px;
     line-height: 1;
-    letter-spacing: -1px;
-    overflow-wrap: break-word; /* ← add this */
+    letter-spacing: -2px;
+    white-space: nowrap;
 }
-
 .hero-subtitle {
     font-size: clamp(16px, 2.5vw, 20px);
     color: #4a7c35;
@@ -905,6 +904,9 @@ img {
     .floating-case {
         display: none;
     }
+    .hero-title {
+    letter-spacing: -2px;
+}
 }
 
 @media (max-width: 400px) {

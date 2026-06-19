@@ -397,10 +397,18 @@ tr:hover td { background: #fafff8; }
             <?php endif; ?>
           </td>
           <td>
-            <?php if ($o['design_file']): ?>
-              <img class="thumb" src="<?= htmlspecialchars($o['design_file']) ?>" onclick="openLightbox(this.src)" />
-            <?php else: ?><span style="color:#9ca3af">-</span><?php endif; ?>
-          </td>
+    <?php if ($o['design_file']): ?>
+      <?php $isPdf = str_ends_with(strtolower($o['design_file']), '.pdf'); ?>
+      <?php if ($isPdf): ?>
+        <a href="<?= htmlspecialchars($o['design_file']) ?>" target="_blank"
+           style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f3f4f6;border-radius:8px;font-size:12px;color:#2d5a1b;text-decoration:none;font-weight:600;">
+          📄 View PDF
+        </a>
+      <?php else: ?>
+        <img class="thumb" src="<?= htmlspecialchars($o['design_file']) ?>" onclick="openLightbox(this.src)" />
+      <?php endif; ?>
+    <?php else: ?><span style="color:#9ca3af">-</span><?php endif; ?>
+</td>
           <td>
             <?php if ($o['payment_file']): ?>
               <img class="thumb" src="<?= htmlspecialchars($o['payment_file']) ?>" onclick="openLightbox(this.src)" />
