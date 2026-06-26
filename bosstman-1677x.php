@@ -168,6 +168,7 @@ $statusColors = [
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Engravers - Admin</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f0f6eb; color: #111; min-height: 100vh; }

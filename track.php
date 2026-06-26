@@ -69,6 +69,7 @@ if ($currentIndex === false) $currentIndex = 0;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Track Order - ENGRAVERS</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {

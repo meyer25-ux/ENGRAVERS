@@ -8,6 +8,7 @@
     <meta name="color-scheme" content="light only">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
         .privacy-hero {
             background-color: #deecd6;
