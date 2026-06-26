@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# ENGRAVERS — root .htaccess
+# ---------------------------------------------------------------------------
+
+# Custom error pages
+ErrorDocument 404 /404.html
+ErrorDocument 403 /404.html
+
+# Redirect old admin.php URL to the new obscured name
+# Anyone who bookmarked admin.php will still get there
+Redirect 301 /admin.php /bosstman-1677x.php
+
+# Disable directory listings
+Options -Indexes
+
+# Block access to sensitive files
+<FilesMatch "\.(env|log|sql|gitignore|md|json|lock)$">
+  Require all denied
+</FilesMatch>
+
+# Block config.php from direct browser access
+<Files "config.php">
+  Require all denied
+</Files>
+
+# Block db.php from direct browser access
+<Files "db.php">
+  Require all denied
+</Files>
